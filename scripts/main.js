@@ -1,133 +1,145 @@
-// Tab functionality
-const tabBtns = document.querySelectorAll(".tab-btn");
-const tabContents = document.querySelectorAll(".tab-content");
+const qrType = document.getElementById("qrType");
+const inputFields = document.getElementById("inputFields");
+const generateBtn = document.getElementById("generateBtn");
+const qrResult = document.getElementById("qrResult");
 
-tabBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    tabBtns.forEach((btn) => btn.classList.remove("active"));
-    tabContents.forEach((content) => content.classList.remove("active"));
-    btn.classList.add("active");
-    const tabId = btn.getAttribute("data-tab");
-    document.getElementById(`${tabId}-tab`).classList.add("active");
-    resetQRCode();
-  });
-});
+function getFields(type) {
+  switch (type) {
+    case "text":
+      return `<input type="text" id="textInput" placeholder="Enter your text" />`;
+    case "url":
+      return `<input type="url" id="urlInput" placeholder="Enter your URL" />`;
+    case "contact":
+      return `
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+          <select id="countryCode">
+            <option value="+1">+1 (US)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+91">+91 (India)</option>
+            <!-- Add more country codes -->
+          </select>
+          <input type="tel" id="phoneInput" placeholder="Phone Number" />
+        </div>
+        <input type="text" id="nameInput" placeholder="Full Name" />
+        <input type="email" id="emailInput" placeholder="Email Address" />
+      `;
+    case "file":
+      return `
+        <input type="file" id="fileInput" accept="image/*" />
+        <div id="filePreview" style="margin-top: 10px;">
+          <p>No file selected</p>
+        </div>
+      `;
+    default:
+      return "";
+  }
+}
 
-// QR Code Generation
-const qrCodeContainer = document.getElementById("qr-code");
-const downloadBtn = document.getElementById("download-btn");
-const saveBtn = document.getElementById("save-btn");
-
-let currentQRCode = null;
-let currentFileData = null;
-
-// Text QR Code
-document.getElementById("generate-text-btn").addEventListener("click", () => {
-  const text = document.getElementById("text-input").value.trim();
-  if (!text) return alert("Please enter some text");
-  generateQRCode(text);
-});
-
-// URL QR Code
-document.getElementById("generate-url-btn").addEventListener("click", () => {
-  let url = document.getElementById("url-input").value.trim();
-  if (!url) return alert("Please enter a URL");
-  if (!url.startsWith("http")) url = "https://" + url;
-  generateQRCode(url);
-});
-
-// Contact QR Code
-document
-  .getElementById("generate-contact-btn")
-  .addEventListener("click", () => {
-    const name = document.getElementById("contact-name").value.trim();
-    const phone = document.getElementById("contact-phone").value.trim();
-    const email = document.getElementById("contact-email").value.trim();
-    const address = document.getElementById("contact-address").value.trim();
-
-    if (!name && !phone && !email && !address) {
-      return alert("Please enter at least one contact detail");
+function generateQR(data) {
+  qrResult.innerHTML = "";
+  QRCode.toCanvas(data, (err, canvas) => {
+    if (err) {
+      console.error(err);
+      qrResult.innerHTML = `<p style="color:red;">QR generation failed.</p>`;
+      return;
     }
-
-    generateQRCode(
-      `MECARD:N:${name};TEL:${phone};EMAIL:${email};ADR:${address};;`
-    );
+    qrResult.appendChild(canvas);
   });
+}
 
-// File QR Code
-document.getElementById("file-input").addEventListener("change", (e) => {
-  currentFileData = e.target.files[0];
-  document.getElementById("generate-file-btn").disabled = !currentFileData;
-});
+function handleGenerate() {
+  const type = qrType.value;
+  let data = "";
 
-document
-  .getElementById("generate-file-btn")
-  .addEventListener("click", async () => {
-    if (!currentFileData) return alert("Please select a file first");
+  if (type === "text") {
+    data = document.getElementById("textInput").value;
+  } else if (type === "url") {
+    data = document.getElementById("urlInput").value;
+  } else if (type === "contact") {
+    const name = document.getElementById("nameInput").value;
+    const phone = document.getElementById("phoneInput").value;
+    const email = document.getElementById("emailInput").value;
+    const countryCode = document.getElementById("countryCode").value;
+    data = `MECARD:N:${name};TEL:${countryCode}${phone};EMAIL:${email};;`;
+  }
 
-    try {
-      const fileExt = currentFileData.name.split(".").pop();
-      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `uploads/${fileName}`;
+  if (data.trim()) {
+    generateQR(data);
+  } else {
+    alert("Please fill in the required fields.");
+  }
+}
 
-      const { error } = await supabase.storage
-        .from("qr-files")
-        .upload(filePath, currentFileData);
+async function handleFileUpload(file) {
+  const previewContainer = document.getElementById("filePreview");
 
-      if (error) throw error;
+  // Show preview
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    previewContainer.innerHTML = `
+  <div class="upload-success-box">
+    <img src="${event.target.result}" alt="Uploaded Image" class="upload-preview-img" />
+    <p class="upload-status-text">✅ Image Uploaded Successfully</p>
+  </div>
+`;
+  };
+  reader.readAsDataURL(file);
 
-      const {
-        data: { publicUrl },
-      } = await supabase.storage.from("qr-files").getPublicUrl(filePath);
+  // Upload to Cloudinary
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "ml_default"); // Replace with your preset
 
-      generateQRCode(publicUrl);
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error uploading file. Please try again.");
-    }
-  });
+  const cloudName = "djthtit8q"; // Replace with your Cloudinary cloud name
+  const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
 
-// Download QR Code
-downloadBtn.addEventListener("click", () => {
-  if (!currentQRCode) return;
-  const canvas = document.querySelector("#qr-code canvas");
-  const link = document.createElement("a");
-  link.download = "qr-code.png";
-  link.href = canvas.toDataURL();
-  link.click();
-});
-
-// Save QR Code
-saveBtn.addEventListener("click", async () => {
-  if (!currentQRCode) return;
   try {
-    const { error } = await supabase
-      .from("saved_qr_codes")
-      .insert([{ content: currentQRCode }]);
-    if (error) throw error;
-    alert("QR code saved!");
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Error saving QR code");
+    const response = await fetch(uploadUrl, {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!data.secure_url) throw new Error("Upload failed");
+
+    console.log("Uploaded Image URL:", data.secure_url);
+
+    // Generate QR from uploaded image URL
+    QRCode.toDataURL(data.secure_url)
+      .then((qrUrl) => {
+        qrResult.innerHTML = `<img src="${qrUrl}" alt="QR Code" />`;
+      })
+      .catch((err) => {
+        console.error("QR Code Generation Failed:", err);
+        qrResult.innerHTML = `<p style="color:red;">QR generation failed.</p>`;
+      });
+  } catch (err) {
+    console.error("Cloudinary Upload Error:", err);
+    previewContainer.innerHTML = `<p style="color:red;">Image upload failed.</p>`;
+  }
+}
+
+// Handle file input change
+document.addEventListener("change", (e) => {
+  if (e.target && e.target.id === "fileInput") {
+    const file = e.target.files[0];
+    if (file) handleFileUpload(file);
   }
 });
 
-// Helper functions
-function generateQRCode(content) {
-  qrCodeContainer.innerHTML = "";
-  const qr = qrcode(0, "L");
-  qr.addData(content);
-  qr.make();
-  qrCodeContainer.innerHTML = qr.createImgTag(10);
-  downloadBtn.disabled = false;
-  saveBtn.disabled = false;
-  currentQRCode = content;
-}
+// Handle QR type change
+qrType.addEventListener("change", () => {
+  inputFields.innerHTML = getFields(qrType.value);
+});
 
-function resetQRCode() {
-  qrCodeContainer.innerHTML = "<p>Generated QR code will appear here</p>";
-  downloadBtn.disabled = true;
-  saveBtn.disabled = true;
-  currentQRCode = null;
-  currentFileData = null;
-}
+// Initial load
+inputFields.innerHTML = getFields(qrType.value);
+generateBtn.addEventListener("click", handleGenerate);
+
+previewContainer.innerHTML = `
+  <div class="upload-success-box">
+    <img src="${event.target.result}" alt="Uploaded Image" class="upload-preview-img" />
+    <p class="upload-status-text">✅ Image Uploaded Successfully</p>
+  </div>
+`;

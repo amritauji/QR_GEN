@@ -3,99 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QRGen - Free QR Code Generator</title>
+    <title>QR Code Generator</title>
     <link rel="stylesheet" href="/Styles/main.css" />
     <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
   </head>
   <body>
-    <header>
-      <div class="container">
-        <h1>QRGen</h1>
-        <p>Generate QR codes for text, URLs, contacts, and more</p>
-      </div>
-    </header>
+    <div class="container">
+      <h1>QR Code Generator</h1>
+      <div class="input-section">
+        <select id="qrType">
+          <option value="text">Text</option>
+          <option value="url">URL</option>
+          <option value="contact">Contact</option>
+          <option value="file">File (Image)</option>
+        </select>
 
-    <main class="container">
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="text">Text</button>
-        <button class="tab-btn" data-tab="url">URL</button>
-        <button class="tab-btn" data-tab="contact">Contact</button>
-        <button class="tab-btn" data-tab="file">File (PDF/Image)</button>
+        <div id="inputFields"></div>
+        <button id="generateBtn">Generate QR</button>
       </div>
+      <div id="qrResult"></div>
+    </div>
 
-      <div class="tab-content active" id="text-tab">
-        <textarea
-          id="text-input"
-          placeholder="Enter text to generate QR code..."
-        ></textarea>
-        <button id="generate-text-btn" class="generate-btn">
-          Generate QR Code
-        </button>
-      </div>
-
-      <div class="tab-content" id="url-tab">
-        <input type="url" id="url-input" placeholder="https://example.com" />
-        <button id="generate-url-btn" class="generate-btn">
-          Generate QR Code
-        </button>
-      </div>
-
-      <div class="tab-content" id="contact-tab">
-        <div class="contact-form">
-          <input type="text" id="contact-name" placeholder="Name" />
-          <input type="tel" id="contact-phone" placeholder="Phone" />
-          <input type="email" id="contact-email" placeholder="Email" />
-          <input type="text" id="contact-address" placeholder="Address" />
-          <button id="generate-contact-btn" class="generate-btn">
-            Generate QR Code
-          </button>
-        </div>
-      </div>
-
-      <div class="tab-content" id="file-tab">
-        <div class="file-upload">
-          <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" />
-          <label for="file-input" class="upload-label">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <span>Choose PDF or Image file</span>
-          </label>
-          <button id="generate-file-btn" class="generate-btn" disabled>
-            Generate QR Code
-          </button>
-        </div>
-      </div>
-
-      <div class="qr-result">
-        <div id="qr-code"></div>
-        <div class="qr-actions">
-          <button id="download-btn" disabled>Download</button>
-          <button id="save-btn" disabled>Save to Account</button>
-        </div>
-      </div>
-    </main>
-
-    <footer>
-      <div class="container">
-        <p>© 2023 QRGen | Powered by Supabase</p>
-      </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/supabase/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <script src="/scripts/main.js"></script>
   </body>
-  <!-- At the bottom of your body tag -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // Initialize Supabase directly in HTML
-    const supabaseUrl = "https://ovmeuzqwtqavzblongln.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIs..."; // your full key here
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-  </script>
-  <script src="/scripts/main.js"></script>
 </html>

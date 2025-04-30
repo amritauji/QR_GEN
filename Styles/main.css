@@ -1,210 +1,140 @@
-:root {
-    --primary-color: #4a6bff;
-    --secondary-color: #f5f7ff;
-    --text-color: #333;
-    --light-gray: #f0f0f0;
-    --border-radius: 8px;
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
+/* style.css */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    line-height: 1.6;
-    color: var(--text-color);
-    background-color: #fff;
+  font-family: 'Roboto', sans-serif;
+  background-color: #eaeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #333;
 }
 
 .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px 0;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 380px;
+  text-align: center;
 }
 
-header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 2rem 0;
-    text-align: center;
-    margin-bottom: 2rem;
+h1 {
+  color: #4CAF50;
+  font-size: 28px;
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+.input-section {
+  margin-bottom: 1.5rem;
 }
 
-.tabs {
-    display: flex;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid #ddd;
+select, input, button {
+  width: 100%;
+  padding: 12px;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.tab-btn {
-    padding: 0.8rem 1.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #666;
-    position: relative;
-    transition: all 0.3s ease;
+select:focus, input:focus, button:focus {
+  outline: none;
+  border-color: #4CAF50;
 }
 
-.tab-btn.active {
-    color: var(--primary-color);
+button {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: var(--primary-color);
+button:hover {
+  background-color: #45a049;
 }
 
-.tab-content {
-    display: none;
-    padding: 1.5rem;
-    background-color: var(--secondary-color);
-    border-radius: var(--border-radius);
-    margin-bottom: 2rem;
-    box-shadow: var(--box-shadow);
+#qrResult canvas {
+  margin-top: 2rem;
+  border: 5px solid #4CAF50;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
-.tab-content.active {
-    display: block;
+input[type="tel"] {
+  width: calc(100% - 70px);
+  display: inline-block;
 }
 
-textarea, input[type="text"], input[type="url"], input[type="tel"], input[type="email"] {
-    width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
+input[type="tel"]:focus {
+  border-color: #4CAF50;
 }
 
-.contact-form input {
-    margin-bottom: 1rem;
+select#countryCode {
+  width: 130px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 10px;
 }
 
-.generate-btn {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.3s;
+input[type="text"]:focus, input[type="url"]:focus {
+  border-color: #4CAF50;
 }
 
-.generate-btn:hover {
-    background-color: #3a5bef;
+/* Add this to style the image preview */
+#filePreview img {
+  max-width: 100%;
+  max-height: 200px;
+  margin-top: 10px;
+  border-radius: 8px;
 }
 
-.file-upload {
-    text-align: center;
-    padding: 2rem;
-    border: 2px dashed #ddd;
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
+#filePreview p {
+  color: #888;
+  font-size: 14px;
 }
 
-.upload-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    color: #666;
+
+.upload-success-box {
+  text-align: center;
+  background-color: #f0f9f4;
+  border: 2px solid #28a745;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.upload-label i {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
+.upload-preview-img {
+  max-width: 200px;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
-#file-input {
-    display: none;
+.upload-status-text {
+  font-weight: 500;
+  color: #28a745;
+  font-size: 14px;
 }
 
-.qr-result {
-    text-align: center;
-    padding: 2rem;
-    background-color: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    margin-bottom: 2rem;
+.upload-success-box {
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-#qr-code {
-    margin: 0 auto 1.5rem;
-    padding: 1rem;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    max-width: 300px;
-}
-
-.qr-actions button {
-    padding: 0.8rem 1.5rem;
-    margin: 0 0.5rem;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-#download-btn {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-#save-btn {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.qr-actions button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-footer {
-    text-align: center;
-    padding: 1.5rem 0;
-    background-color: var(--secondary-color);
-    margin-top: 2rem;
-}
-
-@media (max-width: 768px) {
-    .tabs {
-        flex-wrap: wrap;
-    }
-    
-    .tab-btn {
-        flex: 1 0 50%;
-    }
-    
-    .qr-actions {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .qr-actions button {
-        margin: 0.5rem 0;
-        width: 100%;
-    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
