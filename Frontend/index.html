@@ -44,51 +44,15 @@
               <div class="form-group">
                 <label>Customization</label>
                 <div class="customization-options">
-                  <!-- Foreground Color -->
+                  <!-- Replace gradient toggles with preset options -->
                   <div class="color-option">
-                    <label>QR Code Color</label>
-                    <div class="color-controls">
-                      <input type="color" id="fgColor1" value="#000000" />
-                      <button class="gradient-toggle" data-target="fgColor2">
-                        + Gradient
-                      </button>
-                    </div>
-                    <input
-                      type="color"
-                      id="fgColor2"
-                      class="gradient-color"
-                      style="display: none"
-                      value="#4361ee"
-                    />
-                  </div>
-
-                  <!-- Background Color -->
-                  <div class="color-option">
-                    <label>Background</label>
-                    <div class="color-controls">
-                      <input type="color" id="bgColor1" value="#ffffff" />
-                      <button class="gradient-toggle" data-target="bgColor2">
-                        + Gradient
-                      </button>
-                    </div>
-                    <input
-                      type="color"
-                      id="bgColor2"
-                      class="gradient-color"
-                      style="display: none"
-                      value="#f8f9fa"
-                    />
-                  </div>
-
-                  <!-- Advanced Options -->
-                  <div class="advanced-options">
-                    <label>
-                      <input type="checkbox" id="transparentBg" /> Transparent
-                      Background
-                    </label>
-                    <label>
-                      <input type="checkbox" id="roundedCorners" /> Rounded Dots
-                    </label>
+                    <label>QR Code Style</label>
+                    <select id="qrStyle" class="form-control">
+                      <option value="solid">Solid Color</option>
+                      <option value="gradient1">Blue Gradient</option>
+                      <option value="gradient2">Purple Gradient</option>
+                      <option value="gradient3">Emerald Gradient</option>
+                    </select>
                   </div>
                 </div>
               </div>
