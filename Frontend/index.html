@@ -15,7 +15,6 @@
     />
   </head>
   <body>
-   
     <div class="app-container">
       <!-- Header will be added later -->
       <main class="main-content">
@@ -45,17 +44,51 @@
               <div class="form-group">
                 <label>Customization</label>
                 <div class="customization-options">
-                  <div class="color-picker">
-                    <span>Foreground</span>
-                    <input type="color" id="fgColor" value="#000000" />
+                  <!-- Foreground Color -->
+                  <div class="color-option">
+                    <label>QR Code Color</label>
+                    <div class="color-controls">
+                      <input type="color" id="fgColor1" value="#000000" />
+                      <button class="gradient-toggle" data-target="fgColor2">
+                        + Gradient
+                      </button>
+                    </div>
+                    <input
+                      type="color"
+                      id="fgColor2"
+                      class="gradient-color"
+                      style="display: none"
+                      value="#4361ee"
+                    />
                   </div>
-                  <div class="color-picker">
-                    <span>Background</span>
-                    <input type="color" id="bgColor" value="#ffffff" />
+
+                  <!-- Background Color -->
+                  <div class="color-option">
+                    <label>Background</label>
+                    <div class="color-controls">
+                      <input type="color" id="bgColor1" value="#ffffff" />
+                      <button class="gradient-toggle" data-target="bgColor2">
+                        + Gradient
+                      </button>
+                    </div>
+                    <input
+                      type="color"
+                      id="bgColor2"
+                      class="gradient-color"
+                      style="display: none"
+                      value="#f8f9fa"
+                    />
                   </div>
-                  <div class="checkbox-option">
-                    <input type="checkbox" id="editableOption" />
-                    <label for="editableOption">Editable QR Code</label>
+
+                  <!-- Advanced Options -->
+                  <div class="advanced-options">
+                    <label>
+                      <input type="checkbox" id="transparentBg" /> Transparent
+                      Background
+                    </label>
+                    <label>
+                      <input type="checkbox" id="roundedCorners" /> Rounded Dots
+                    </label>
                   </div>
                 </div>
               </div>
@@ -80,7 +113,6 @@
           </div>
         </div>
       </main>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>

@@ -197,3 +197,81 @@ document.addEventListener("change", (e) => {
 
 // Initialize
 inputFields.innerHTML = getFields(qrType.value);
+
+
+
+// Gradient Toggle Logic
+document.querySelectorAll('.gradient-toggle').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const targetId = e.target.dataset.target;
+    const colorInput = document.getElementById(targetId);
+    colorInput.style.display = colorInput.style.display === 'none' ? 'block' : 'none';
+    e.target.textContent = colorInput.style.display === 'none' ? '+ Gradient' : '× Remove';
+  });
+});
+
+// Modified generateQR function
+function generateQR(data) {
+  const fgColor1 = document.getElementById('fgColor1').value;
+  const fgColor2 = document.getElementById('fgColor2').value;
+  const bgColor1 = document.getElementById('bgColor1').value;
+  const bgColor2 = document.getElementById('bgColor2').value;
+  const transparentBg = document.getElementById('transparentBg').checked;
+  
+  // Create gradient
+  const fgGradient = fgColor1 !== fgColor2 
+    ? `linear-gradient(135deg, ${fgColor1}, ${fgColor2})`
+    : fgColor1;
+
+  const options = {
+    color: {
+      dark: fgGradient,
+      light: transparentBg ? '#00000000' : 
+            (bgColor1 !== bgColor2 
+              ? `linear-gradient(135deg, ${bgColor1}, ${bgColor2})`
+              : bgColor1)
+    },
+    margin: 2,
+    errorCorrectionLevel: 'H'
+  };
+
+  // Generate QR with options
+  QRCode.toCanvas(data, options, (err, canvas) => {
+    if (err) {
+      console.error(err);
+      showToast("QR generation failed", true);
+      return;
+    }
+    
+    if (document.getElementById('roundedCorners').checked) {
+      roundQRDots(canvas);
+    }
+    
+    qrResult.innerHTML = '';
+    qrResult.appendChild(canvas);
+  });
+}
+
+// Helper for rounded dots
+function roundQRDots(canvas) {
+  const ctx = canvas.getContext('2d');
+  const size = canvas.width;
+  const moduleSize = size / (21 + 8); // 21 modules + 4px margin each side
+  
+  // Sample implementation - would need more precise module detection
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillStyle = 'black';
+  
+  // Draw rounded rectangles at module positions
+  // (This is simplified - real implementation would need module detection)
+  for (let y = 0; y < 21; y++) {
+    for (let x = 0; x < 21; x++) {
+      const px = 4 + x * moduleSize;
+      const py = 4 + y * moduleSize;
+      
+      ctx.beginPath();
+      ctx.roundRect(px, py, moduleSize, moduleSize, [moduleSize/2]);
+      ctx.fill();
+    }
+  }
+}

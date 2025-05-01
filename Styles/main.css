@@ -410,3 +410,66 @@ input[type="file"]::file-selector-button {
   padding: 0.5rem;
   background: white;
 }
+
+
+/* Customization Section */
+.customization-options {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.color-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.color-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.gradient-toggle {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s;
+}
+
+.gradient-toggle:hover {
+  background: #f0f4ff;
+}
+
+.gradient-color {
+  margin-top: 0.5rem;
+}
+
+.advanced-options {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #eee;
+}
+
+/* For gradient preview */
+.color-preview {
+  width: 100%;
+  height: 30px;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+.color-option::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 20px;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  background: var(--preview-gradient);
+}
